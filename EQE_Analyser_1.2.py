@@ -7765,6 +7765,8 @@ Bulk_DataFrame = Bulk_DataFrame.loc[ list( Bulk_System_Analysis_Method.keys() ) 
 
 Bulk_System_Identifiers = list( Bulk_DataFrame.index )
 
+Inorganic_System_Identifiers = [ j for j in Bulk_System_Identifiers if 'INO' in Bulk_DataFrame[ 'System_Ref' ][ j ] ]
+
 Organic_System_Identifiers = [ j for j in Bulk_System_Identifiers if 'ORG' in Bulk_DataFrame[ 'System_Ref' ][ j ] ]
     
 Perovskite_System_Identifiers = [ j for j in Bulk_System_Identifiers if 'PER' in Bulk_DataFrame[ 'System_Ref' ][ j ] ]
@@ -7957,7 +7959,7 @@ def Bulk_System_Analyser( Button ):
                 
                 Wavelengths = Wavelengths[ ::-1 ]
                 
-                EQEa = EQEs[ ::-1 ]
+                EQEs = EQEs[ ::-1 ]
             
             EQE_Spectra_to_Investigate[ System_Ref ] = array( [ Wavelengths , EQEs ] )
             
@@ -7975,6 +7977,10 @@ def Bulk_System_Analyser( Button ):
     # Ensure PCEs and Gaps Are Properly Stored
     #----------------------------------------------------------------------------------------------------------------------- 
 
+    Inorganic_E_gs = [ E_gs[ j ] for j in Inorganic_System_Identifiers ]
+    
+    Inorganic_PCEs = [ PCEs[ j ] for j in Inorganic_System_Identifiers ]
+        
     Organic_E_gs = [ E_gs[ j ] for j in Organic_System_Identifiers ]
     
     Organic_PCEs = [ PCEs[ j ] for j in Organic_System_Identifiers ]
@@ -7989,7 +7995,7 @@ def Bulk_System_Analyser( Button ):
     
     Simulated_E_gs = arange( min( E_gs ), max( E_gs ) + 0.05 , 0.05  )
     
-    Photon_Energies = linspace( 0.01 , 10 , 301 )
+    Photon_Energies = linspace( 0.01 , 10 , 1001 )
     
     Photon_Wavelengths = Energy_Wavelength_Converter( Photon_Energies )
 
@@ -8021,9 +8027,17 @@ def Bulk_System_Analyser( Button ):
         
         plt.plot( Simulated_E_gs, 85 * array( Simulated_PCEs ), label = '85% SQ Limit' )    
         
-        plt.plot( Perovskite_E_gs, 100 * array( Perovskite_PCEs ), '.', label = 'Perovskites' )
+        if len( Perovskite_E_gs ) != 0:
             
-        plt.plot( Organic_E_gs, 100 * array( Organic_PCEs ), '.', label = 'Organics' )
+            plt.plot( Perovskite_E_gs, 100 * array( Perovskite_PCEs ), '.', label = 'Perovskites' )
+
+        if len( Organic_E_gs ) != 0:
+            
+            plt.plot( Organic_E_gs, 100 * array( Organic_PCEs ), '.', label = 'Organics' )
+        
+        if len( Inorganic_E_gs ) != 0:
+            
+            plt.plot( Inorganic_E_gs, 100 * array( Inorganic_PCEs ), '.', label = 'Inorganics' )
         
         plt.ylabel( 'PCE (%)')
         
@@ -8101,7 +8115,7 @@ def Individual_System_Analyser( Key, System_Ref, Spectrum_Type, Light_Power ):
     
     if Bulk_System_Analysis_Method[ Key ] == 'V_oc':
         
-        Lower_Energy_Limit = Bulk_E_lowers[ j ]
+        Lower_Energy_Limit = Bulk_E_lowers[ Key ]
                 
         #-------------------------------------------------------------------------------------------------------------------
         # Determine where difference is minimal
@@ -8301,5 +8315,5 @@ Full_Interface.set_title( 2 , 'Bulk Analysis' )
 # In[211]:
 
 
-Full_Interface
+display( Full_Interface )
 
