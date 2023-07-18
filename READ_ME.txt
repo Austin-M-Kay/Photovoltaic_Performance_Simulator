@@ -8,11 +8,11 @@ and how to navigate the GUI.
 
 If you would like to see the fully-commented Jupyter notebook, open 
 
-'EQE_Analyser_Tool_1.0.ipynb'. Alternatively, if you would just like to use
+'Detailed_EQE_Analyser_Tool_1.2.ipynb'. Alternatively, if you would just like to use
 
-the interface, open 'Bare_EQE_Analyser_Tool_1.0.ipynb'. Running the latter 
+the interface, open 'EQE_Analyser_Tool_1.2.ipynb'. Running the latter 
 
-will execute the secondary Python script 'EQE_Analyser_Tool_1.0.py', which 
+will execute the secondary Python script 'EQE_Analyser_Tool_1.2.py', which 
 
 contains all the code.
 
