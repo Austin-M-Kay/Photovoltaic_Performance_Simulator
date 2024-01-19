@@ -1,6 +1,8 @@
 # Photovoltaic_Performance_Simulator
 A Jupyter-based tool with graphical user interface for simulating photovoltaic performance under arbitrary illumination conditions.
 
+_From Version 2.0 of the tool onwards, an alternative algorithm (Brent's method) is used to find the open-circuit voltage and maximum power point parameters, speeding up the code by around a factor of four. In addition, shunt and series resistances have been incorporated into the ideal diode model used to simulate the photovoltaic figures-of-merit._
+
 This tool is based on the theory outlined in:
 
 Kay, A.M., Fitzsimons, M.E., Burwell, G., Meredith, P., Armin, A. and Sandberg, O.J. (2023), The Thermodynamic Limit of Indoor Photovoltaics Based on Energetically-Disordered Molecular Semiconductors. Sol. RRL. Accepted Author Manuscript. https://doi.org/10.1002/solr.202300277
