@@ -1,5 +1,5 @@
 # Photovoltaic_Performance_Simulator
-A Jupyter-based tool with graphical user interface for simulating photovoltaic performance under arbitrary illumination conditions.
+An open-source, Jupyter-based tool with graphical user interface for simulating photovoltaic performance under arbitrary illumination conditions.
 
 _From Version 2.0 of the tool onwards, an alternative algorithm (Brent's method) is used to find the open-circuit voltage and maximum power point parameters, speeding up the code by around a factor of four. In addition, shunt and series resistances have been incorporated into the ideal diode model used to simulate the photovoltaic figures-of-merit._
 
