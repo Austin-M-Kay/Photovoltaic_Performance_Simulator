@@ -1,0 +1,62 @@
+# Choose year of data
+year = '2018'
+# Set leap year to true or false. True will return leap day data if present, false will not.
+leap_year = 'false'
+# Set time interval in minutes, i.e., '30' is half hour intervals. Valid intervals are 30 & 60.
+interval = '30'
+# Specify Coordinated Universal Time (UTC), 'true' will use UTC, 'false' will use the local time zone of the data.
+# NOTE: In order to use the NSRDB data in SAM, you must specify UTC as 'false'. SAM requires the data to be in the
+# local time zone.
+utc = 'false'
+
+# You must request an NSRDB api key from https://developer.nrel.gov/signup/
+
+api_key = 'INSERT_YOUR_NREL_API_KEY_BETWEEN_THESE_INVERTED_COMMAS'
+
+# Your email address
+
+your_email = 'JohnSmith@gmail.com'
+
+Valid_Modes = { Country : [] for Country in Countries }
+
+for Country in Countries:
+    
+    Country_Selector.value = Country
+
+    lat, lon =  Latitude_Longitude_Finder( City_Selector.value )
+    
+    print( Country, City_Selector.value, lat, lon )
+
+    for j in Regions.keys():
+    
+        Region = Regions[ j ]
+            
+        interval = Temporal_Resolutions[ Region ][ -1 ]
+    
+        year = Region[ -9:-5 ]
+    
+        print( Region, year, interval )
+
+        URL_End = 'wkt=POINT({lon}%20{lat})&names={year}&leap_day={leap}&interval={interval}&utc={utc}&email={email}&api_key={api}'.format(year=year, lat=lat, lon=lon, leap=leap_year, interval=interval, utc=utc, email = your_email, api=api_key)
+
+        URL_Start = URL_Starts[ j ]
+    
+        Full_URL = URL_Start + URL_End
+    
+        try:
+        
+            info = read_csv( Full_URL, nrows = 1)
+    
+            Outcome = True
+    
+        except:
+    
+            Outcome = False
+        
+        if Outcome:
+        
+            Valid_Modes[ Country ].append( Region )
+            
+    print( Country, Valid_Modes[ Country ] )
+        
+Valid_Modes

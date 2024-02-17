@@ -1,0 +1,1 @@
+{"N": 6, "Types": ["glass", "ITO", "ZnO", "Y6", "MoO3", "ITO"], "IQE": 1.0, "Surrounding_Medium": "air", "phi0": 0.0, "Thicknesses": [1.0, 100.0, 30.0, 100.0, 10.0, 100.0], "Active_Layer_Index": 4, "Incoherent_Substrate": true, "Translucent_Nth_Layer": true}

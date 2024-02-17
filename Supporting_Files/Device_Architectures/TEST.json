@@ -1,0 +1,1 @@
+{"N": 4, "Types": ["glass", "sigma100", "Ag", "PEDOT"], "IQE": 1.0, "Surrounding_Medium": "air", "phi0": 0.0, "Thicknesses": [1000.0, 100.0, 100.0, 100.0], "Active_Layer_Index": 3, "Incoherent_Substrate": true, "Translucent_Nth_Layer": false}

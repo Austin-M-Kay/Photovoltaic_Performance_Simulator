@@ -1,0 +1,1 @@
+{"N": 2, "Types": ["glass", "sigma100"], "IQE": 1.0, "Surrounding_Medium": "air", "phi0": 0.0, "Thicknesses": [1000000.0, 100.0], "Active_Layer_Index": 2, "Incoherent_Substrate": true, "Translucent_Nth_Layer": false}

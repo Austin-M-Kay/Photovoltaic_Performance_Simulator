@@ -1,0 +1,35 @@
+Target_Filepath = 'C:\\Users\\austi\\OneDrive\\Desktop\\PhD Research\\Manuscripts\\Active\\Optimal Cell Number (Greg)\\System_Specific_Data'
+
+#Filename = 'ORG_65'
+
+#Filename = 'PER_159'
+
+Filename = 'CdTe'
+
+Luxes = [ 50, 200, 500, 1000 ]
+    
+Test_Rshs = [ 2e4, 3e4, 4e4, 5e4, 6e4, 7e4, 8e4, 9e4 ]
+
+#Light_Intensity = str( int( Intensity_Input.value ) )
+
+for Lux in Luxes:
+    
+    Intensity_Input.value = Lux
+    
+    Light_Intensity = str( int( Lux  ) )
+    
+    for Rsh in Test_Rshs:
+    
+        print( Lux, Rsh )
+    
+        Shunt_Resistance_Input.value = Rsh
+        
+        Simulate_JV_Curve_Buttons[ Filename ].click()
+
+        Output_Filepath = path.join( Target_Filepath, 'VJ_LEDB4_' + Light_Intensity + 'lux_CdTe_Rsh_' + str( int( Rsh ) ) + '.csv')
+
+#        Output_Filepath = path.join( Target_Filepath, 'VJ_LEDB4_' + Light_Intensity + 'lux_PER_159_Rsh_' + str( int( Rsh ) ) + '.csv')
+    
+       # Output_Filepath = path.join( Target_Filepath, 'VJ_LEDB4_' + Light_Intensity + 'lux_PBDTTT-EFT_EH-IDTBR_Rsh_' + str( int( Rsh ) ) + '.csv')
+    
+        DataFrame( Current_Voltage_Curves_Exp_EQEs[ Filename ] ).to_csv( Output_Filepath, header = None, index = False )

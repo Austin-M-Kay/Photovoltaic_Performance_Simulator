@@ -1,0 +1,121 @@
+Sim_Thicknesses = arange( 10, 410, 10 )
+
+E_lower = 1.2
+
+min_lambda = 370
+    
+max_lambda = 700
+
+EQEs = {}
+
+Rs = {}
+
+Ts = {}
+
+AVTs = {}
+
+FoMs = { 'E_opt' : [],
+        
+        'J_sc' : [],
+        
+        'V_oc': [],
+        
+        'V_oc_rad': [],
+        
+        'V_mpp': [],
+        
+        'J_mpp': [],
+        
+        'P_mpp': [], 
+        
+        'FF': [],
+        
+        'PCE' : [] } 
+
+for Thickness in Sim_Thicknesses:
+    
+    Layer_Thicknesses[ 4 ].value = Thickness
+
+#    Optical_Modelling_Controller( '' )
+    
+    Calculate_Limit_Button.click()
+    
+    EQEs[ Thickness ] = Optical_Modelling_Output[ 'EQE' ]
+    
+    Rs[ Thickness ] = Optical_Modelling_Output[ 'R' ]
+    
+    T_values = Optical_Modelling_Output[ 'T' ]
+    
+    Ts[ Thickness ] = T_values
+    
+    Wavelengths = Optical_Modelling_Output[ 'Wavelength' ]
+    
+    min_Differences = abs( Wavelengths - min_lambda ) 
+
+    max_Differences = abs( Wavelengths - max_lambda )
+
+    min_Index = where( min_Differences == min( min_Differences ) )[ 0 ][ 0 ]
+
+    max_Index = where( max_Differences == min( max_Differences ) )[ 0 ][ 0 ]
+
+    AVT = mean( T_values[ min_Index : max_Index + 1 ] )
+    
+    AVTs[ Thickness ] = AVT
+    
+    #-----------------------------------------------------------------------------------------------------------------------
+    # Compute limits
+    #-----------------------------------------------------------------------------------------------------------------------
+    
+    NR_Loss_Types = list( Compiled_Figures_of_Merit.keys() )
+    
+    if len( NR_Loss_Types ) == 1:
+        
+        print( "1 NR Loss Model" )
+        
+        print( Thickness, AVT )
+        
+        Data = DataFrame( Compiled_Figures_of_Merit[ NR_Loss_Types[ 0 ] ] )
+    
+        E_opts = array( list( Data[ 'E_opt' ] ) )
+        
+        Cut_Index = where( abs( E_opts - E_lower ) == min( abs( E_opts - E_lower ) ) )[ 0 ][ 0 ]
+        
+        print( Cut_Index )
+        
+        Sliced_Data = dict( Data.iloc[ Cut_Index ] )
+        
+        print( Sliced_Data )
+        
+        for FoM in list( FoMs.keys() ):
+            
+            FoMs[ FoM ].append( Sliced_Data[ FoM ] )
+
+
+####
+
+DataFrame( FoMs ).to_clipboard( index = False )
+
+DataFrame( { 'Wavelength' : Wavelengths } | EQEs ).to_csv( 
+    
+    path.join( Current_Working_Directory, 'Semi_Transparent_OPV_Opt_Mod_EQE.csv' ),
+
+    index = False )
+
+DataFrame( { 'Wavelength' : Wavelengths } | Rs ).to_csv( 
+    
+    path.join( Current_Working_Directory, 'Semi_Transparent_OPV_Opt_Mod_R.csv' ),
+
+    index = False )
+
+
+DataFrame( { 'Wavelength' : Wavelengths } | Ts ).to_csv( 
+    
+    path.join( Current_Working_Directory, 'Semi_Transparent_OPV_Opt_Mod_T.csv' ),
+
+    index = False )
+
+DataFrame( { 'd' : Sim_Thicknesses , 'AVT' : list( AVTs.values() ) } ).to_csv( 
+    
+    path.join( Current_Working_Directory, 'Semi_Transparent_OPV_Opt_Mod_AVT.csv' ),
+
+    index = False )
