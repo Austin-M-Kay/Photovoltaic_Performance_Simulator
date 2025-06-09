@@ -1,0 +1,11 @@
+### Indoor PV Standard Light Sources (including LED-B4 and FL-10) are from the International Commission on Illumination (CIE):
+
+https://cie.co.at/datatable/relative-spectral-power-distributions-illuminants-representing-typical-led-lamps-1nm
+
+https://cie.co.at/datatable/relative-spectral-power-distributions-illuminants-representing-typical-fluorescent-lamps-0
+
+### Additional LED light sources were obtained from commercially-available CREE Lamps:
+
+https://www.cree-led.com/products/leds/xlamp/
+
+### Incandescent light sources were simulated using the Planck/black-body spectrum at a given colour temperature T_Lamp.
