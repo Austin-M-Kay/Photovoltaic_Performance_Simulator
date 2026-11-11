@@ -29,7 +29,6 @@ An open-source, Jupyter-based tool with graphical user interface for simulating 
     DOI: <a href="https://doi.org/10.1088/2515-7655/ad1764">10.1088/2515-7655/ad1764</a>
   </li>
   <li>
-  <li>
     <i>'Wide-Gap Perovskites for Indoor Photovoltaics'</i>,
     <br>
     Burwell, Zeiske, S., Caprioglio, P., Sandberg, O.J., Kay, A.M., Farrar. M.D., Kim., Y.R., Snaith, H.J., Meredith, P., & Armin, A.,
