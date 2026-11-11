@@ -90,19 +90,19 @@ An open-source, Jupyter-based tool with graphical user interface for simulating 
 
 <ul>
     <li>
-<i>From Version 3.1 of the tool onwards, two additional simulation modes are available: (i) Indoor PV Validation, which accompanies the EES Solar publication by Kay et al. and can be used to validate indoor photovoltaic measurements using thermodynamic analysis, and (ii) Shunt Resistance Estimation (from current-voltage curves), which accompanies the pre-print "Computing at the Edge Enabled by Indoor Photovoltaics and Ferroelectrics". In addition, more light sources have been added, and more systems stored in the database. Furthermore, in response to the rebranding of the National Renewable Energy Laboratory (NREL) to the National Laboratory of the Rockies (NLR), the API-requesting code for geo-meteorological modelling has had to be revised. Whilst revising this code, additional satellite resources and a "User-defined" deployment location option have been added, alongside a two-dimensional (temperature and irradiance) interpolation algorithm to speed up analysis of all six irradiance types.</i>
+<i>From <b>Version 3.1</b> of the tool onwards, two additional simulation modes are available: (i) Indoor PV Validation, which accompanies the EES Solar publication by Kay et al. and can be used to validate indoor photovoltaic measurements using thermodynamic analysis, and (ii) Shunt Resistance Estimation (from current-voltage curves), which accompanies the pre-print "Computing at the Edge Enabled by Indoor Photovoltaics and Ferroelectrics". In addition, more light sources have been added, and more systems stored in the database. Furthermore, in response to the rebranding of the National Renewable Energy Laboratory (NREL) to the National Laboratory of the Rockies (NLR), the API-requesting code for geo-meteorological modelling has had to be revised. Whilst revising this code, additional satellite resources and a "User-defined" deployment location option have been added, alongside a two-dimensional (temperature and irradiance) interpolation algorithm to speed up analysis of all six irradiance types.</i>
   </li>
   <li>
-<i>From Version 3.0 of the tool onwards, the underlying script has been entirely reworked, such that the input parameters are taken from an Excel file ("Parameter_Values.xlsx"), rather than the current values of the input widgets. This means that the "PV_Sim_3.0.py" script can be run independently of the GUI in Spyder.</i>
+<i>From <b>Version 3.0</b> of the tool onwards, the underlying script has been entirely reworked, such that the input parameters are taken from an Excel file ("Parameter_Values.xlsx"), rather than the current values of the input widgets. This means that the "PV_Sim_3.0.py" script can be run independently of the GUI in Spyder.</i>
   </li>
   <li>
-<i>From Version 2.1 of the tool onwards, geographical+meteorological photovoltaic (GeoPV) modelling capabilities have been included into the tool, enabling location-dependent modelling of different photovoltaic technologies.</i>
+<i>From <b>Version 2.1</b> of the tool onwards, geographical+meteorological photovoltaic (GeoPV) modelling capabilities have been included into the tool, enabling location-dependent modelling of different photovoltaic technologies.</i>
   </li>
   <li>
-<i>From Version 2.1 of the tool onwards, a normal-incidence optical transfer matrix model has been included in the tool to simulate the photovoltaic external quantum efficiency of organic semiconductor-based photovoltaics using the optical constants of the consituent layers. This model (based on the work of Pettersson et al. [1999] and Peumans et al. [2002]) feeds directly into the thermodynamic limit calculation model.</i>
+<i>From <b>Version 2.1</b> of the tool onwards, a normal-incidence optical transfer matrix model has been included in the tool to simulate the photovoltaic external quantum efficiency of organic semiconductor-based photovoltaics using the optical constants of the consituent layers. This model (based on the work of Pettersson et al. [1999] and Peumans et al. [2002]) feeds directly into the thermodynamic limit calculation model.</i>
   </li>
   <li>
-<i>From Version 2.0 of the tool onwards, an alternative algorithm (Brent's method) is used to find the open-circuit voltage and maximum power point parameters, speeding up the code by around a factor of four. In addition, shunt and series resistances have been incorporated into the ideal diode model used to simulate the photovoltaic figures-of-merit.</i>
+<i>From <b>Version 2.0</b> of the tool onwards, an alternative algorithm (Brent's method) is used to find the open-circuit voltage and maximum power point parameters, speeding up the code by around a factor of four. In addition, shunt and series resistances have been incorporated into the ideal diode model used to simulate the photovoltaic figures-of-merit.</i>
   </li>
 </ul>
 
