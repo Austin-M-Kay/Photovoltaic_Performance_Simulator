@@ -80,7 +80,7 @@ An open-source, Jupyter-based tool with graphical user interface for simulating 
     <br>
     <i>arXiv Pre-print</i> (2026)
     <br>
-    DOI: <a href="https://arxiv.org/abs/2610.05133">https://arxiv.org/abs/2610.05133)/a>
+    DOI: <a href="https://arxiv.org/abs/2610.05133">https://arxiv.org/abs/2610.05133</a>
   </li>
 </ol>
 
