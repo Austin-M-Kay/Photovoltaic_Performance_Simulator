@@ -4,8 +4,16 @@ https://cie.co.at/datatable/relative-spectral-power-distributions-illuminants-re
 
 https://cie.co.at/datatable/relative-spectral-power-distributions-illuminants-representing-typical-fluorescent-lamps-0
 
-### Additional LED light sources were obtained from commercially-available CREE Lamps:
+### Additional LED spectral distributions (for different colour-rendering indices/CRIs) were obtained from commercially-available CREE Lamps:
 
 https://www.cree-led.com/products/leds/xlamp/
 
+and
+
+Eden-LEDs:
+
+http://www.eden-led.com/H-_Series_Track_Light_Wattage:_20W.html
+
 ### Incandescent light sources were simulated using the Planck/black-body spectrum at a given colour temperature T_Lamp.
+
+# Additional Sources from: Appendix 5: Relative Spectral Power Distributions of Illuminants (https://doi.org/10.1002/9781119975595.app5) 

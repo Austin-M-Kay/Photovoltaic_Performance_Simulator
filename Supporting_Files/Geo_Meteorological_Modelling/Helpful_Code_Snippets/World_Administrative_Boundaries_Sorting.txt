@@ -1,0 +1,564 @@
+# Load Boundary Data
+
+Boundaries_Data_Path = path.join( Solar_Insolation_Support_Path, "World_Administrative_Boundaries.xlsx" )
+
+Boundaries_DF = read_excel( Boundaries_Data_Path, header = None )
+
+Boundaries_Countries = Boundaries_Countries_DF[ "English Name" ]
+
+# Incomplete_Data_Countries = [36, 45, 85, 87, 112, 168]
+
+# ['Russian Federation', 'United States of America', 'Canada', 'Greenland', 'Indonesia', 'Moldova, Republic of']
+
+Boundary_Folder_Path = path.join( Solar_Insolation_Support_Path, "Boundaries" )
+
+Boundary_File_Paths = { Country : path.join( Boundary_Folder_Path, Country + '.xlsx' ) for Country in Boundaries_Countries }
+
+Boundaries = {}
+
+Actual_Country = { j : '' for j in range( len( Boundaries_DF.columns ) ) }
+
+Found_Countries = { 
+    
+    9 : 'Equatorial Guinea', #
+    
+    22: 'Netherlands Antilles', #
+    
+    36 : 'Russian Federation',
+    
+    45 : 'United States of America',
+    
+    48 : 'Dominican Republic', #
+    
+    54 : 'British Indian Ocean Territory', #
+
+    85 : 'Canada',
+
+    87 : 'Greenland',
+    
+    98 : 'South Sudan', #
+    
+    100 : 'U.K. of Great Britain and Northern Ireland', #
+
+    112 : 'Indonesia',
+    
+    117 : 'Nigeria',
+    
+    118 : 'Norfolk Island',
+    
+    119 : 'Aksai Chin',
+    
+    132 : "Democratic People's Republic of Korea",
+
+    168 : 'Moldova, Republic of',
+
+    172 : 'American Samoa',
+
+    174 : 'Australia',
+
+    187 : 'Azores Islands',
+
+    195 : 'South Georgia & the South Sandwich Islands',
+
+    203 : 'Democratic Republic of the Congo',
+
+    204 : 'Guinea-Bissau',
+
+    205 : 'Papua New Guinea',
+
+    253 : 'New Zealand' }
+
+for j in Found_Countries.keys():
+    
+    Actual_Country[ j ] = Found_Countries[ j ] 
+
+Incomplete_Data_Countries = [36, 45, 85, 87, 112, 168]
+
+Incomplete_Data_Countries = [ Found_Countries[ j ] for j in Incomplete_Data_Countries ]
+
+Unassigned_Countries = [ Country for Country in Countries if Country not in Found_Countries.values() ] 
+
+for j in range( len( Boundaries_DF.columns ) ):
+    
+    if Actual_Country[ j ] == '':
+        
+        Data = list( Boundaries_DF[ j ] )
+    
+        Data = [ el for el in Data if str( el ) != 'nan' ]
+            
+        Possible_Countries = []
+    
+        for el in Data:
+        
+            for Country in Boundaries_Countries:
+            
+                try:
+                
+                    if Country in el:
+                
+                        Possible_Countries.append( Country )
+                                        
+                except:
+                
+                    pass
+    
+        if len( Possible_Countries ) == 1:
+        
+            Actual_Country[ j ] = Possible_Countries[ 0 ]
+        
+        elif len( Possible_Countries ) ==0:
+        
+            pass
+        
+        else:
+        
+            print( j, len( Possible_Countries ) )
+        
+            Lengths = [ len( el ) for el in Possible_Countries ]
+                
+            Actual_Country[ j ] = Possible_Countries[ Lengths.index( max( Lengths ) ) ]
+
+
+#####
+
+# Countries don't line up in,'.xlsx' and '.csv' files 
+
+import string
+
+Unwanted_Characters = [ '[', '{', '}', ':', '"', ' ' ] + list( string.ascii_lowercase ) + list( string.ascii_uppercase )
+
+Boundaries = {}
+
+for j in range( len( Boundaries_Countries ) ):
+    
+    Country = Actual_Country[ j ]
+        
+    if Country == '':
+        
+        Country = str( j )
+    
+    Boundary_Coordinates = list( Boundaries_DF[ j ] )[ 1: ]
+    
+    Treated_Coordinates = []
+    
+    for Coordinate in Boundary_Coordinates:
+                
+        if type( Coordinate ) != str:
+            
+            Coordinate = str( Coordinate )
+            
+        if ';' in Coordinate:
+        
+            Cut_Index = Coordinate.index( ';' )
+        
+            Coordinate = Coordinate[ Cut_Index + 1: ]
+        
+            Coordinate = Coordinate.replace( ';', '' )
+            
+        if "type" not in Coordinate:
+            
+            for Character in Unwanted_Characters:
+            
+                Coordinate = Coordinate.replace( Character, '' )
+        
+            if Coordinate != '':
+            
+                Treated_Coordinates.append( Coordinate )
+                
+    Cut_Indices = [ k for k in range( len( Treated_Coordinates ) ) if ']]' in Treated_Coordinates[ k ] ]
+
+    # Account for big countries:
+    
+    if '[' in Treated_Coordinates[ -1 ] or ']' in Treated_Coordinates[ -1 ]:
+        
+        Cut_Indices.append( int( len( Treated_Coordinates ) - 1 ) )
+        
+    Islands = []
+    
+    for k in range( len( Cut_Indices ) ):
+        
+        Upper_Index = Cut_Indices[ k ]
+        
+        if k == 0:
+            
+            Lower_Index = 0
+            
+        else:
+            
+            Lower_Index = Cut_Indices[ k - 1 ] + 1
+        
+      #  print( Lower_Index, Upper_Index )
+        
+        Indices = [ l for l in range( Lower_Index, Upper_Index + 1 ) ]
+        
+        Islands.append( [ Treated_Coordinates[ l ] for l in Indices ] )
+        
+    Final_Islands = []
+    
+    for Island in Islands:
+        
+        N_Coords = len( Island )
+        
+        Grouped_Coordinates = []
+        
+        for k in range( int( N_Coords / 2 ) ):
+            
+            #print( k )
+            
+            try:
+            
+                Longitude = float( Island[ 2 * k ].replace( '[', '' ) )
+            
+                Latitude = float( Island[ 2 * k + 1 ].replace( ']', '' ) )
+        
+                Grouped_Coordinates.append( [ Longitude, Latitude ] )
+        
+            except:
+                
+                pass
+            
+        Final_Islands.append( Grouped_Coordinates )
+        
+    Boundaries[ Country ] = Final_Islands    
+
+
+#####
+
+
+import string
+
+Unwanted_Characters = [ '[', '{', '}', ':', '"', ' ' ] + list( string.ascii_lowercase ) + list( string.ascii_uppercase )
+
+Boundaries = { Country : [] for Country in Boundaries_Countries }
+
+for j in range( len( Boundaries_Countries ) ):
+    
+    Country = Boundaries_Countries[ j ]
+    
+    Boundary_Coordinates = list( Boundaries_DF[ j ] )[ 1: ]
+    
+    Treated_Coordinates = []
+    
+    for Coordinate in Boundary_Coordinates:
+                
+        if type( Coordinate ) != str:
+            
+            Coordinate = str( Coordinate )
+            
+        if ';' in Coordinate:
+        
+            Cut_Index = Coordinate.index( ';' )
+        
+            Coordinate = Coordinate[ Cut_Index + 1: ]
+        
+            Coordinate = Coordinate.replace( ';', '' )
+            
+        if "type" not in Coordinate:
+            
+            for Character in Unwanted_Characters:
+            
+                Coordinate = Coordinate.replace( Character, '' )
+        
+            if Coordinate != '':
+            
+                Treated_Coordinates.append( Coordinate )
+                
+    Cut_Indices = [ k for k in range( len( Treated_Coordinates ) ) if ']]' in Treated_Coordinates[ k ] ]
+
+    # Account for big countries:
+    
+    if '[' in Treated_Coordinates[ -1 ] or ']' in Treated_Coordinates[ -1 ]:
+        
+        Cut_Indices.append( int( len( Treated_Coordinates ) - 1 ) )
+        
+    Islands = []
+    
+    for k in range( len( Cut_Indices ) ):
+        
+        Upper_Index = Cut_Indices[ k ]
+        
+        if k == 0:
+            
+            Lower_Index = 0
+            
+        else:
+            
+            Lower_Index = Cut_Indices[ k - 1 ] + 1
+        
+      #  print( Lower_Index, Upper_Index )
+        
+        Indices = [ l for l in range( Lower_Index, Upper_Index + 1 ) ]
+        
+        Islands.append( [ Treated_Coordinates[ l ] for l in Indices ] )
+        
+    Final_Islands = []
+    
+    for Island in Islands:
+        
+        N_Coords = len( Island )
+        
+        Grouped_Coordinates = []
+        
+        for k in range( int( N_Coords / 2 ) ):
+            
+            #print( k )
+            
+            try:
+            
+                Longitude = float( Island[ 2 * k ].replace( '[', '' ) )
+            
+                Latitude = float( Island[ 2 * k + 1 ].replace( ']', '' ) )
+        
+                Grouped_Coordinates.append( [ Longitude, Latitude ] )
+        
+            except:
+                
+                pass
+            
+        if Grouped_Coordinates != []:
+            
+            Final_Islands.append( Grouped_Coordinates )
+        
+    Boundaries[ Country ] = Final_Islands    
+
+
+#####
+
+import pandas as pd 
+
+plt.figure( dpi = 200 )
+
+for Country in Boundaries_Countries:
+    
+    Islands = Boundaries[ Country ]
+    
+    j = 0
+    
+    Boundary_File_Path = Boundary_File_Paths[ Country ]
+    
+    Output_DataFrame = {}
+    
+    for Island_Coords in Islands:
+        
+        if Island_Coords != []:
+                    
+          #  print( j )
+        
+            Island_Coords.append( Island_Coords[ 0 ] )  # Create a closed loop
+        
+            Longs = []
+    
+            Lats = []
+    
+            for Coordinates_Set in Island_Coords:
+        
+         #   print( Coordinates_Set )
+                    
+                Longs.append( float( Coordinates_Set[ 0 ] ) ) 
+            
+                Lats.append( float( Coordinates_Set[ 1 ] ) )
+        
+            Output_DataFrame[ "Longitude" + str( j ) ] = Longs
+
+            Output_DataFrame[ "Latitude" + str( j ) ] = Lats
+            
+            plt.plot( Longs, Lats , 'tab:blue' )
+            
+            j += 1
+            
+
+    Output_DataFrame = DataFrame(dict([ (k,pd.Series(v)) for k,v in Output_DataFrame.items() ]))
+    
+    Output_DataFrame.to_excel( Boundary_File_Path, index = False )
+
+# Add Capitals
+
+for Country in list( Capitals.keys() ):
+    
+    Capital = Capitals[ Country ] 
+    
+    if Capital != []:
+    
+        Latitude, Longitude =  Latitude_Longitude_Finder( Capitals[ Country ] )
+
+        plt.plot( Longitude, Latitude, '.', color = 'tab:orange' )
+
+plt.ylim( [ -90, 90 ] )
+plt.xlim( [-180, 180 ])
+plt.xlabel( 'Longitude' );
+plt.ylabel( 'Latitude' );
+plt.show()
+
+
+import json
+
+JSON_Data_Path = path.join( Solar_Insolation_Support_Path, "world-administrative-boundaries.json" )
+
+Boundaries_Countries_Path = path.join( Solar_Insolation_Support_Path, "World_Administrative_Boundaries_Countries.xlsx" )
+
+Boundaries_Countries_DF = read_excel( Boundaries_Countries_Path )
+
+Boundaries_Countries = Boundaries_Countries_DF[ "English Name" ]
+
+f = open( JSON_Data_Path )
+
+data = json.load( f )
+
+import itertools
+
+for j in range( len( data ) ):
+    
+    data_j = data[ j ]
+    
+    Country = data_j[ "name" ]
+    
+ #   print( j, Country )    
+    
+    Groups = data_j[ "geo_shape"][ "geometry" ][ "coordinates" ]
+    
+#    for Group in Groups:
+        
+#        for Island in Group:
+        
+#            Island.append( Island[ 0 ] )
+        
+#            Coordinates = array( Island )
+        
+#            try:
+        
+ #               plt.plot( Coordinates[ :, 0], Coordinates[ :, 1 ] )
+        
+  #          except:
+            
+   #             pass
+   
+    Groups = list( itertools.chain( *Groups ) )
+    
+    for Island in Groups:
+                
+        Island.append( Island[ 0 ] )
+        
+        Coordinates = array( Island )
+        
+        try:
+        
+            plt.plot( Coordinates[ :, 0], Coordinates[ :, 1 ] )
+        
+        except:
+            
+            pass        
+f.close()
+
+
+###
+
+
+import pandas as pd
+
+Incomplete_Sets =  ['Russian Federation', 'United States of America', 'Canada', 'Greenland', 'Indonesia', 'Moldova, Republic of']
+
+JSON_Boundaries = {}
+
+import json
+
+JSON_Data_Path = path.join( Solar_Insolation_Support_Path, "world-administrative-boundaries.json" )
+
+Boundaries_Countries_Path = path.join( Solar_Insolation_Support_Path, "World_Administrative_Boundaries_Countries.xlsx" )
+
+Boundaries_Countries_DF = read_excel( Boundaries_Countries_Path )
+
+Boundaries_Countries = Boundaries_Countries_DF[ "English Name" ]
+
+f = open( JSON_Data_Path )
+
+data = json.load( f )
+
+import itertools
+
+Output_DataFrames = {}
+for j in range( len( data ) ):
+    
+    data_j = data[ j ]
+    
+    Country = data_j[ "name" ]
+    
+    if Country in Incomplete_Sets:
+        
+        print( Country )
+        
+        Groups = data_j[ "geo_shape"][ "geometry" ][ "coordinates" ]
+    
+        Groups = list( itertools.chain( *Groups ) )
+    
+        Output_DataFrame = {}
+        
+        for j in range( len( Groups ) ):
+                
+            Island = Groups[ j ]
+            
+            Island.append( Island[ 0 ] )
+        
+            Coordinates = array( Island )
+            
+            Output_DataFrame[ 'Longitude' + str( j ) ] = list( Coordinates[ :, 0 ] )
+            
+            Output_DataFrame[ 'Latitude' + str( j ) ] = list( Coordinates[ :, 1 ] )            
+        
+            try:
+        
+                plt.plot( Coordinates[ :, 0], Coordinates[ :, 1 ] )
+        
+            except:
+            
+                pass    
+            
+        Output_DataFrame = DataFrame(dict([ (k,pd.Series(v)) for k,v in Output_DataFrame.items() ]))            
+            
+        Output_DataFrames[ Country ] = Output_DataFrame
+        
+f.close()
+
+###
+
+FilePaths = { Country : path.join( Current_Working_Directory, Country + '.xlsx' ) for Country in Incomplete_Sets }
+
+for Country in Incomplete_Sets[ 1: ]:
+    
+    Output_DataFrames[ Country ].to_excel( FilePaths[ Country ], index = False )
+
+
+
+#######
+
+
+
+plt.figure( dpi = 1000 )
+
+for Country in Boundaries_Countries:
+    
+    Data = Country_Boundary_Loader( Country )
+    
+    N_Islands = int( len( Data.columns ) / 2 )
+    
+    for j in range( N_Islands ):
+        
+        Longitudes = Data[ "Longitude" + str( j ) ]
+    
+        Latitudes = Data[ "Latitude" + str( j ) ]
+
+        plt.plot( Longitudes, Latitudes, color = 'cornflowerblue', linewidth = 1 )
+        
+for Country in list( Capitals.keys() ):
+    
+    Capital = Capitals[ Country ] 
+    
+    if Capital != []:
+    
+        Latitude, Longitude =  Latitude_Longitude_Finder( Capitals[ Country ] )
+
+        plt.plot( Longitude, Latitude, '.', color = 'sandybrown', mec = 'peru' )
+
+plt.ylim( [ -90, 90 ] )
+plt.xlim( [-180, 180 ])
+plt.xlabel( 'Longitude ($\degree$)' );
+plt.ylabel( 'Latitude ($\degree$)' );
